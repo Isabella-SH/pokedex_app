@@ -21,8 +21,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    service=PokemonService();
-    initialize();
+    service=PokemonService();   //inicializo el servicio
+    initialize();               //tare la lista de todos los ppokemones
     super.initState();
   }
 
@@ -37,11 +37,11 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
 
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: Center(
-          child: PokemonList(pokemons: pokemons!),
+        body: Center(                   //se renderiza, antes nulo y luego con valores
+          child: PokemonList(pokemons:pokemons),
         ),
       )
     );
