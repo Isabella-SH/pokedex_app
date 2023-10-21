@@ -47,6 +47,14 @@ class PokemonItem extends StatefulWidget{
 class _PokemonItemState extends State<PokemonItem>{
 
   late NetworkImage image;
+  late bool isFavorite;
+
+  //inicializa el booleano en false
+  @override
+  void initState(){
+    isFavorite=false;
+    super.initState();
+  }
   
   @override
   Widget build(BuildContext context){
@@ -59,10 +67,36 @@ class _PokemonItemState extends State<PokemonItem>{
 
       color: Colors.white,
       elevation: 2.0,
+
       child: Row(
+
         children: [
+
           Image(image: image,),
-          Text(widget.pokemon.name)
+          Text(widget.pokemon.name),
+
+          //FAVORITE
+          Expanded( //utiliza tod el espacio disponible
+              child:
+              Row( //crea una fila donde su unico elemento es el icono de favorite
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                      onPressed: (){
+                        //cambia el estado del booleano
+                        setState(() {
+                          isFavorite=!isFavorite;
+                        });
+                      },
+                      icon: Icon(
+                        Icons.favorite,
+                        //cambia de rojo a gris
+                        color: isFavorite ? Colors.red : Colors.grey,
+                      )
+                  ),
+                ],
+              )
+          )
         ],
       )
     );
