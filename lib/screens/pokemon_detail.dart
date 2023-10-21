@@ -36,7 +36,11 @@ class _PokemonDetailState extends State<PokemonDetail> {
 
     return Scaffold(
       appBar: AppBar(),
-      body: Text(pokemonInfo!=null? pokemonInfo!.name:""),
+      body: pokemonInfo==null?
+          //si el pokemoninfo es nulo muestra el ciurcular...., ":"->sino
+        const Center(child:CircularProgressIndicator()):
+          //muestra toda esta estructura
+        Text(pokemonInfo!.name),
     );
   }
 }

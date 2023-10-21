@@ -17,11 +17,14 @@ class _PokemonListState extends State<PokemonList>{
   @override
   Widget build(BuildContext context){
 
+    return widget.pokemons==null?
+    const Center(child: CircularProgressIndicator()):
+
     //retorna una lista de pokemons item
-    return ListView.builder(
+     ListView.builder(
                  //si la lista en nula muestro 0 resultados
                                               //si no es nula muestro los resultados que tenga la lista
-      itemCount: (widget.pokemons==null)? 0: widget.pokemons?.length,
+      itemCount: widget.pokemons?.length,
 
       itemBuilder: (context,index){
         return PokemonItem(pokemon:widget.pokemons?[index], index:index);
