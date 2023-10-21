@@ -23,7 +23,7 @@ class _PokemonListState extends State<PokemonList>{
       itemCount: (widget.pokemons==null)? 0: widget.pokemons?.length,
 
       itemBuilder: (context,index){
-        return PokemonItem(pokemon:widget.pokemons?[index]);
+        return PokemonItem(pokemon:widget.pokemons?[index], index:index);
       }
     );
   }
@@ -34,10 +34,11 @@ class _PokemonListState extends State<PokemonList>{
 
 class PokemonItem extends StatefulWidget{
 
-  const PokemonItem({super.key, required this.pokemon});
+  const PokemonItem({super.key, required this.pokemon, required this.index});
 
   //parametros
-  final Pokemon pokemon;  
+  final Pokemon pokemon;
+  final int index;
 
   @override
   State<PokemonItem> createState()=>_PokemonItemState();
@@ -51,7 +52,7 @@ class _PokemonItemState extends State<PokemonItem>{
   Widget build(BuildContext context){
     
     //definir la imagen antes de añadirla en el card
-    image=const NetworkImage("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png");
+    image = NetworkImage("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${widget.index + 1}.png");
     
     //cada pokemonitem es un card con la siguiente estructura
     return Card(
