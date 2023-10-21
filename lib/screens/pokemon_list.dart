@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:pokedex_app/models/pokemon.dart';
+import 'package:pokedex_app/screens/pokemon_detail.dart';
 
 class PokemonList extends StatefulWidget{
 
@@ -63,42 +64,53 @@ class _PokemonItemState extends State<PokemonItem>{
     image = NetworkImage("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${widget.index + 1}.png");
     
     //cada pokemonitem es un card con la siguiente estructura
-    return Card(
+    return GestureDetector(
+      //al darle click
+      onTap: (){
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context)=>PokemonDetail(id: widget.index +1))
+        );
+      },
 
-      color: Colors.white,
-      elevation: 2.0,
+      child: Card(
 
-      child: Row(
+        color: Colors.white,
+        elevation: 2.0,
 
-        children: [
+        child: Row(
 
-          Image(image: image,),
-          Text(widget.pokemon.name),
+          children: [
 
-          //FAVORITE
-          Expanded( //utiliza tod el espacio disponible
-              child:
-              Row( //crea una fila donde su unico elemento es el icono de favorite
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                      onPressed: (){
-                        //cambia el estado del booleano
-                        setState(() {
-                          isFavorite=!isFavorite;
-                        });
-                      },
-                      icon: Icon(
-                        Icons.favorite,
-                        //cambia de rojo a gris
-                        color: isFavorite ? Colors.red : Colors.grey,
-                      )
-                  ),
-                ],
-              )
-          )
-        ],
-      )
+            Image(image: image,),
+            Text(widget.pokemon.name),
+
+            //FAVORITE
+            Expanded( //utiliza tod el espacio disponible
+                child:
+                Row( //crea una fila donde su unico elemento es el icono de favorite
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                        onPressed: (){
+                          //cambia el estado del booleano
+                          setState(() {
+                            isFavorite=!isFavorite;
+                          });
+                        },
+                        icon: Icon(
+                          Icons.favorite,
+                          //cambia de rojo a gris
+                          color: isFavorite ? Colors.red : Colors.grey,
+                        )
+                    ),
+                  ],
+                )
+            )
+          ],
+        )
+      ),
     );
   }
 }

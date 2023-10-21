@@ -40,6 +40,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        appBar: AppBar(),
         body: Center(                   //se renderiza, antes nulo y luego con valores
           child: PokemonList(pokemons:pokemons),
         ),
