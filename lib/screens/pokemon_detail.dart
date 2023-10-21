@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pokedex_app/models/pokemon.dart';
+import 'package:pokedex_app/screens/pokemon_list.dart';
 import 'package:pokedex_app/services/pokemon_service.dart';
 
 class PokemonDetail extends StatefulWidget {
@@ -40,9 +41,62 @@ class _PokemonDetailState extends State<PokemonDetail> {
           //si el pokemoninfo es nulo muestra el ciurcular...., ":"->sino
         const Center(child:CircularProgressIndicator()):
           //muestra toda esta estructura
-        Text(pokemonInfo!.name),
+        PokemonItem(pokemonInfo: pokemonInfo!),
     );
   }
 }
+
+class PokemonItem extends StatefulWidget {
+  const PokemonItem({super.key, required this.pokemonInfo});
+
+  //parametros
+  final PokemonInfo pokemonInfo;
+
+  @override
+  State<PokemonItem> createState() => _PokemonItemState();
+}
+
+class _PokemonItemState extends State<PokemonItem> {
+  @override
+
+  Widget build(BuildContext context) {
+
+    final image=NetworkImage(widget.pokemonInfo.urlImage, scale: 0.50);
+
+    return
+        Scaffold(
+
+          appBar: AppBar(
+            title: Text(widget.pokemonInfo.name),
+          ),
+
+          body: Column(
+            children: [
+              Image(image: image),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: widget.pokemonInfo.types
+                    .map((e) => Container(
+                  decoration: BoxDecoration(
+                    color: Colors.green[200],
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(e),
+                  ),
+                )).toList()??[]
+              ),
+
+             Column(
+               children: widget.pokemonInfo.stats.map((e) => Text(e.name)).toList()??[],
+             )
+            ],
+          ),
+        );
+  }
+}
+
 
 

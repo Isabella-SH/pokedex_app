@@ -20,13 +20,15 @@ class PokemonInfo{
   int height;
   List types;
   List stats;
+  String urlImage;
 
   PokemonInfo(
       { required this.name,
         required this.weight,
         required this.height,
         required this.types,
-        required this.stats
+        required this.stats,
+        required this.urlImage
       }
   );
 
@@ -39,9 +41,13 @@ class PokemonInfo{
         weight=json["weight"],
 
         //el jon tiene la estructura de types->type->name
-        types=json["types"].map((map)=> map["type"]["name"]).toList(),
+        types=json["types"].map((i)=> i["type"]["name"].toString()).toList(),
 
-        stats=json["stats"].map((map)=> Stat.fromJson(map)).toList();
+        stats=json["stats"].map((map)=> Stat.fromJson(map)).toList(),
+
+        //el jon tiene la estructura de sprites->front_default
+        urlImage=json["sprites"]["front_default"];
+
 }
 
 
