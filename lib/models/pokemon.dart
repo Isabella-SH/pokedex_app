@@ -1,16 +1,21 @@
 
+import 'package:pokedex_app/utils/Functions.dart';
+
 class Pokemon{
 
   //va a tenr un atributo de name
-  String name;
-  Pokemon({required this.name});
+  final String name;
+  final String id;
+
+  const Pokemon({required this.name, required this.id});
 
   //recojemos la informacion de un pokemon de un json
   //claave: recibe primero el tipo de dato
   //dynamic: cualquier valor
   //                    clave,valor                 asi se llama en el json
-  Pokemon.fromJson(Map<String, dynamic>json): name=json["name"];
-
+  Pokemon.fromJson(Map<String, dynamic>json):
+        name=json["name"],
+        id=getId(json["url"]);  //usa la funcion de FUNCTIONS
 }
 
 class PokemonInfo{
@@ -18,9 +23,8 @@ class PokemonInfo{
   String name;
   int weight;
   int height;
-  List types;
-  List stats;
-  String urlImage;
+  List<String> types;
+  List<Stat> stats;
 
   PokemonInfo(
       { required this.name,
@@ -28,7 +32,6 @@ class PokemonInfo{
         required this.height,
         required this.types,
         required this.stats,
-        required this.urlImage
       }
   );
 
@@ -41,13 +44,11 @@ class PokemonInfo{
         weight=json["weight"],
 
         //el jon tiene la estructura de types->type->name
-        types=json["types"].map((i)=> i["type"]["name"].toString()).toList(),
+        types=json["types"]
+            .map<String>((type)=> type["type"]["name"].toString()).toList(),
 
-        stats=json["stats"].map((map)=> Stat.fromJson(map)).toList(),
-
-        //el jon tiene la estructura de sprites->front_default
-        urlImage=json["sprites"]["front_default"];
-
+        stats=json["stats"]
+            .map<Stat>((stat)=> Stat.fromJson(stat)).toList().cast<Stat>();
 }
 
 

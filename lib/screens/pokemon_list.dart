@@ -2,11 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex_app/models/pokemon.dart';
 import 'package:pokedex_app/screens/pokemon_detail.dart';
+import 'package:pokedex_app/services/pokemon_service.dart';
+import 'package:pokedex_app/utils/Functions.dart';
 
 class PokemonList extends StatefulWidget{
 
-  const PokemonList({super.key, required this.pokemons});
-  final List? pokemons;      //puede ssr una lista nula
+  const PokemonList({super.key});
 
   @override
   State<PokemonList> createState()=> _PokemonListState();
@@ -14,21 +15,34 @@ class PokemonList extends StatefulWidget{
 
 class _PokemonListState extends State<PokemonList>{
 
+  //"_"-> indica que es privado
+  List<Pokemon>? _pokemons;
+  PokemonService? _pokemonService;
+
+  @override
+  void initState(){
+    //inicializa el servicio
+    _pokemonService=PokemonService();
+    initialize();
+    super.initState();
+  }
+
+  Future initialize()async{
+    //llama a un metodo del servicio y lo almacena en pokemons
+    _pokemons=await _pokemonService?.getAll();
+    setState(() {
+      _pokemons=_pokemons;
+    });
+  }
+
   @override
   Widget build(BuildContext context){
-
-    return widget.pokemons==null?
-    const Center(child: CircularProgressIndicator()):
-
-    //retorna una lista de pokemons item
-     ListView.builder(
+            //retorna una lista de pokemons item
+    return ListView.builder(
                  //si la lista en nula muestro 0 resultados
                                               //si no es nula muestro los resultados que tenga la lista
-      itemCount: widget.pokemons?.length,
-
-      itemBuilder: (context,index){
-        return PokemonItem(pokemon:widget.pokemons?[index], index:index);
-      }
+      itemCount: _pokemons?.length ?? 0,
+      itemBuilder: (context,index)=>PokemonItem(pokemon:_pokemons?[index]),
     );
   }
 }
@@ -38,11 +52,10 @@ class _PokemonListState extends State<PokemonList>{
 
 class PokemonItem extends StatefulWidget{
 
-  const PokemonItem({super.key, required this.pokemon, required this.index});
+  const PokemonItem({super.key, required this.pokemon});
 
   //parametros
-  final Pokemon pokemon;
-  final int index;
+  final Pokemon? pokemon;
 
   @override
   State<PokemonItem> createState()=>_PokemonItemState();
@@ -50,69 +63,45 @@ class PokemonItem extends StatefulWidget{
 
 class _PokemonItemState extends State<PokemonItem>{
 
-  late NetworkImage image;
-  late bool isFavorite;
+  bool isFavorite=false;
 
-  //inicializa el booleano en false
-  @override
-  void initState(){
-    isFavorite=false;
-    super.initState();
-  }
-  
   @override
   Widget build(BuildContext context){
-    
+
     //definir la imagen antes de añadirla en el card
-    image = NetworkImage("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${widget.index + 1}.png");
-    
+    final image = getImage(widget.pokemon?.id?? "");  //llama al metodo de FUNCTIONS
+    final icon= Icon(
+      Icons.favorite,
+      //cambia de rojo a gris
+      color: isFavorite ? Colors.red : Colors.grey,
+    );
+    final pokemon=widget.pokemon;
+
     //cada pokemonitem es un card con la siguiente estructura
     return GestureDetector(
       //al darle click
-      onTap: (){
+      onTap: ()=>
         Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context)=>PokemonDetail(id: widget.index +1))
-        );
-      },
-
+            context,
+            MaterialPageRoute(
+              builder: (context) => PokemonDetail(id: pokemon?.id ?? "1"))),
       child: Card(
 
-        color: Colors.white,
-        elevation: 2.0,
+          elevation: 2,
 
-        child: Row(
+          child: ListTile(
 
-          children: [
-
-            Image(image: image,),
-            Text(widget.pokemon.name),
-
-            //FAVORITE
-            Expanded( //utiliza tod el espacio disponible
-                child:
-                Row( //crea una fila donde su unico elemento es el icono de favorite
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    IconButton(
-                        onPressed: (){
-                          //cambia el estado del booleano
-                          setState(() {
-                            isFavorite=!isFavorite;
-                          });
-                        },
-                        icon: Icon(
-                          Icons.favorite,
-                          //cambia de rojo a gris
-                          color: isFavorite ? Colors.red : Colors.grey,
-                        )
-                    ),
-                  ],
-                )
-            )
-          ],
-        )
+            leading: Image(image: image),
+            title: Text(pokemon?.name ?? ""),
+            trailing: IconButton(
+              onPressed: (){
+                setState(() {
+                  isFavorite= !isFavorite;
+                });
+              },
+              icon: icon,
+            ),
+          )
       ),
     );
   }

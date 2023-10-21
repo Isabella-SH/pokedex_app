@@ -8,7 +8,7 @@ class PokemonService{
   final baseUrl="https://pokeapi.co/api/v2/pokemon/";
 
   //devuelve en algun momento una lista
-  Future<List> getAllPokemons() async{
+  Future<List<Pokemon>?> getAll() async{
 
     http.Response response=await http.get(Uri.parse(baseUrl));
 
@@ -18,31 +18,30 @@ class PokemonService{
       //es la respuesta de tod el json
       final jsonResponse=json.decode(response.body);
 
-      //accede a results, esta es una lista de map
-      final pokemonsMap= jsonResponse["results"];
+      final List maps=jsonResponse["results"];
 
       //cada map es asignado a un objeto Pokemon usando su metodo de fromJson
       //crea una lista de Pokemon
-      return pokemonsMap.map((map)=> Pokemon.fromJson(map)).toList();
+      final pokemons = maps.map((e) => Pokemon.fromJson(e)).toList();
+
+      return pokemons;
     }
     return [];
   }
 
-  Future<PokemonInfo?>getPokemonById(int id) async{
+  Future<PokemonInfo?>getById(String id) async{
                            //https://pokeapi.co/api/v2/pokemon/6
     http.Response response=await http.get(Uri.parse("$baseUrl$id"));
-    final PokemonInfo? pokemonInfo;
 
     //si la respuesta devuelve algo
     if(response.statusCode==HttpStatus.ok){
       //es la respuesta de tod el json
       final jsonResponse=json.decode(response.body);
-      pokemonInfo=PokemonInfo.fromJson(jsonResponse);
+      final pokemonInfo=PokemonInfo.fromJson(jsonResponse);
       return pokemonInfo;
     }
     return null;
   }
-
 
 }
 
