@@ -41,44 +41,100 @@ class _PokemonDetailState extends State<PokemonDetail> {
   Widget build(BuildContext context) {
 
     final image= getImage(widget.id);  //fucnion de FUNCTIONS
+    final width= MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_pokemonInfo?.name ??""),
-      ),
-      body: Column(
-        children: [
 
-          Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.deepPurple,
-              borderRadius: BorderRadius.circular(20),
-              ),
-            child: Image(image: image)
+      body: SingleChildScrollView(
+
+        child: Column(
+
+          children: [
+                                          //LA IMAGEN COMO ENCABEZADO
+            Padding(
+
+              padding: const EdgeInsets.only(bottom: 20),
+              child: Container(
+                  decoration: const BoxDecoration(
+                      color: Colors.deepPurple,
+                      borderRadius:
+                      BorderRadius.vertical(bottom: Radius.circular(30))),
+                  width: width,
+                  height: width * 0.7,
+                  child: Image(image: image)),
             ),
-          ),
 
-          Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: _pokemonInfo?.types
-                  .map((e) => Container(
-                decoration: BoxDecoration(
-                  color: Colors.green[200],
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(e),
-                ),
-              )).toList()??[]
-          ),
-          Column(
-            children: _pokemonInfo?.stats.map((e) => Text(e.name)).toList()??[],
-          )
-        ],
-      )
+                                        //NOMBRE EN EL CENTRO
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: Text(
+                _pokemonInfo?.name ?? "",
+                style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              ),
+            ),
+
+                              //MOSTRAR LOS TYPES DEL POKEMON COMO FILA
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: _pokemonInfo?.types
+                      .map((e) => Container(
+                    decoration: BoxDecoration(
+                      color: Colors.pink[200],
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text(e),
+                    ),
+                  ))
+                      .toList() ??
+                      []),
+            ),
+
+                             //MOSTRAR DATOS DEL WIGHT Y HEIGHT
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                        _pokemonInfo?.weight.toString() ?? "",
+                        style: const TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      const Text(
+                        "Weight",
+                        style: TextStyle(fontWeight: FontWeight.w200),
+                      ),
+                    ],
+                  ),
+                  Column(children: [
+                    Text(
+                      _pokemonInfo?.height.toString() ?? "",
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    const Text(
+                      "Height",
+                      style: TextStyle(fontWeight: FontWeight.w200),
+                    ),
+                  ]),
+                ],
+              ),
+            ),
+
+                             //MOSTRAR EN COLUMNA LOS DATOS DE STATS
+            Column(
+              children:
+              _pokemonInfo?.stats.map((e) => Text(e.name)).toList() ?? [],
+            )
+          ],
+        ),
+      ),
     );
   }
 }
