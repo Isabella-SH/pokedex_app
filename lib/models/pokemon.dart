@@ -16,6 +16,15 @@ class Pokemon{
   Pokemon.fromJson(Map<String, dynamic>json):
         name=json["name"],
         id=getId(json["url"]);  //usa la funcion de FUNCTIONS
+
+  //retorna un mapa con los datos que se tenga en esta clase
+  //para el repository
+  Map<String,dynamic> toMap(){
+    return {
+      'id':id,
+    };
+  }
+
 }
 
 class PokemonInfo{
