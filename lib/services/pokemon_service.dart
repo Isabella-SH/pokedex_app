@@ -8,9 +8,10 @@ class PokemonService{
   final baseUrl="https://pokeapi.co/api/v2/pokemon/";
 
   //devuelve en algun momento una lista
-  Future<List<Pokemon>?> getAll() async{
+  Future<List<Pokemon>?> getAll(int page, int size) async{
 
-    http.Response response=await http.get(Uri.parse(baseUrl));
+    http.Response response=await http.get(Uri
+        .parse("$baseUrl?offset=${page*size}&limit=$size"));
 
     //si la respuesta devuelve algo
     if(response.statusCode==HttpStatus.ok){

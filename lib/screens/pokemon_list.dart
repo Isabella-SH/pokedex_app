@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:pokedex_app/models/pokemon.dart';
 import 'package:pokedex_app/repositories/pokemon_repository.dart';
 import 'package:pokedex_app/screens/pokemon_detail.dart';
@@ -17,35 +18,67 @@ class PokemonList extends StatefulWidget{
 class _PokemonListState extends State<PokemonList>{
 
   //"_"-> indica que es privado
-  List<Pokemon>? _pokemons;
   PokemonService? _pokemonService;
+  //para la paginacion
+  final _pageSize=20;
+
+  //para la paginacion
+  final PagingController<int,Pokemon>_pagingController=PagingController(firstPageKey: 0);
 
   @override
   void initState(){
     //inicializa el servicio
     _pokemonService=PokemonService();
-    initialize();
+    _pagingController.addPageRequestListener((pageKey) {
+      _fetchPage(pageKey);
+    });
     super.initState();
   }
 
-  Future initialize()async{
-    //llama a un metodo del servicio y lo almacena en pokemons
-    _pokemons=await _pokemonService?.getAll();
-    setState(() {
-      _pokemons=_pokemons;
-    });
+  Future _fetchPage(int pageKey) async {
+    try {
+      //trae todos los pokemons
+      final pokemons = await _pokemonService?.getAll(pageKey, _pageSize)??[];
+      final isLastPage = pokemons.length < _pageSize;
+      if (isLastPage) {
+        _pagingController.appendLastPage(pokemons);
+      } else {
+        final nextPageKey = pageKey + 1;
+        _pagingController.appendPage(pokemons, nextPageKey);
+      }
+    } catch (error) {
+      _pagingController.error = error;
+    }
   }
 
   @override
   Widget build(BuildContext context){
-            //retorna una lista de pokemons item
+
+    return PagedListView<int,Pokemon>(
+        pagingController: _pagingController,
+        builderDelegate: PagedChildBuilderDelegate<Pokemon>(
+          itemBuilder: (context,item,index)=>PokemonItem(pokemon: item),
+        ),
+    );
+
+    /*
+    //retorna una lista de pokemons item
     return ListView.builder(
                  //si la lista en nula muestro 0 resultados
                                               //si no es nula muestro los resultados que tenga la lista
       itemCount: _pokemons?.length ?? 0,
       itemBuilder: (context,index)=>PokemonItem(pokemon:_pokemons?[index]),
     );
+
+     */
   }
+
+  @override
+  void dispose(){
+    _pagingController.dispose();
+    super.dispose();
+  }
+
 }
 
 //FUCIONES QUE  RETORNAN WIDGETS NO
@@ -76,9 +109,12 @@ class _PokemonItemState extends State<PokemonItem>{
   initialize()async{
     //si es true, llama al repository y su metodo de mostrar los favoritos
     isFavorite= await PokemonRepository().isFavorite(widget.pokemon!);
-    setState(() {
-      isFavorite= isFavorite;
-    });
+
+    if(mounted){
+      setState(() {
+        isFavorite= isFavorite;
+      });
+    }
   }
 
   @override
