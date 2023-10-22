@@ -48,7 +48,18 @@ class _PokemonDetailState extends State<PokemonDetail> {
       ),
       body: Column(
         children: [
-          Image(image: image,),
+
+          Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.deepPurple,
+              borderRadius: BorderRadius.circular(20),
+              ),
+            child: Image(image: image)
+            ),
+          ),
+
           Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: _pokemonInfo?.types
