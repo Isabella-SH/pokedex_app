@@ -19,7 +19,7 @@ class PokemonRepository{
         where: "id=?", whereArgs:[pokemon.id]);
   }
 
-  //agrega pokemons que se marcaron como favorito
+  //lista pokemons que se marcaron como favorito
   Future<bool> isFavorite(Pokemon pokemon) async{
     Database db= await PokemonDatabase().openDb();
     //metodo de pokemon.dart

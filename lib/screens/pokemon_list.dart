@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:pokedex_app/models/pokemon.dart';
+import 'package:pokedex_app/repositories/pokemon_repository.dart';
 import 'package:pokedex_app/screens/pokemon_detail.dart';
 import 'package:pokedex_app/services/pokemon_service.dart';
 import 'package:pokedex_app/utils/Functions.dart';
@@ -66,6 +67,21 @@ class _PokemonItemState extends State<PokemonItem>{
   bool isFavorite=false;
 
   @override
+  void initState(){
+    initialize();
+    super.initState();
+  }
+
+  //para saber si el pokemos recibido esta marcado como favorito o no
+  initialize()async{
+    //si es true, llama al repository y su metodo de mostrar los favoritos
+    isFavorite= await PokemonRepository().isFavorite(widget.pokemon!);
+    setState(() {
+      isFavorite= isFavorite;
+    });
+  }
+
+  @override
   Widget build(BuildContext context){
 
     //definir la imagen antes de añadirla en el card
@@ -98,6 +114,10 @@ class _PokemonItemState extends State<PokemonItem>{
                 setState(() {
                   isFavorite= !isFavorite;
                 });
+                //si es true inserta el pokemon a la db
+                isFavorite? PokemonRepository().insert(pokemon!)
+                //sino es false, se elimina de la db
+                :PokemonRepository().delete(pokemon!);
               },
               icon: icon,
             ),
