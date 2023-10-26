@@ -18,9 +18,24 @@ class _HomeState extends State<Home> {
         title: const Text("Pokedex"),
       ),
       body: const PokemonList(),
+
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Colors.red,
+        unselectedItemColor: Colors.grey,
+        items: const[
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: "Favorites"),
+        ],
+      ),
     );
   }
 }
+
+
+
+
+
+
 
 
 
