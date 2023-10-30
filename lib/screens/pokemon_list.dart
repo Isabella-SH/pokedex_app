@@ -144,7 +144,11 @@ class _PokemonItemState extends State<PokemonItem>{
 
           child: ListTile(
 
-            leading: Image(image: image),
+            leading: Hero( //para darle una transicion a la imagen
+                tag: widget.pokemon?.id??'',
+                child: Image(image: image)
+            ),
+
             title: Text(pokemon?.name ?? ""),
             trailing: IconButton(
               onPressed: (){

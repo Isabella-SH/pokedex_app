@@ -61,7 +61,12 @@ class _PokemonDetailState extends State<PokemonDetail> {
                       BorderRadius.vertical(bottom: Radius.circular(30))),
                   width: width,
                   height: width * 0.7,
-                  child: Image(image: image)),
+
+                  child: Hero(//para darle una transicion a la imagen
+                      tag: widget.id,
+                      child: Image(image: image)
+                  ),
+              )
             ),
 
                                         //NOMBRE EN EL CENTRO

@@ -1,5 +1,6 @@
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:pokedex_app/repositories/pokemon_repository.dart';
 import 'package:pokedex_app/models/pokemon.dart';
 
@@ -34,7 +35,11 @@ class _FavoritesListState extends State<FavoritesList> {
     return ListView.builder(
       itemCount: _pokemons?.length?? 0 ,
       itemBuilder: ((context,index){
-        return Text(_pokemons?[index].name??'');
+        return Card(child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(_pokemons?[index].name??''),
+            )
+        );
       })
     );
   }
