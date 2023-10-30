@@ -110,6 +110,7 @@ class _PokemonItemState extends State<PokemonItem>{
     //si es true, llama al repository y su metodo de mostrar los favoritos
     isFavorite= await PokemonRepository().isFavorite(widget.pokemon!);
 
+    //sirva para que primero cargue los datos y luego valide la interaccion con ello
     if(mounted){
       setState(() {
         isFavorite= isFavorite;

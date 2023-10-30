@@ -22,9 +22,16 @@ class Pokemon{
   Map<String,dynamic> toMap(){
     return {
       'id':id,
+      'name':name,
     };
   }
 
+  //convierte un map a objeto Pokemon
+  //sirve para que convierta lo que devuleve la tabla "pokemons" de nuestra base de datos creada
+  //para el getAll()
+  Pokemon.fromMap(Map<String, dynamic>map):
+        name=map["name"],
+        id=map['id'];
 }
 
 class PokemonInfo{

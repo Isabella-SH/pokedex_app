@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';                               //importar .io
 import 'package:http/http.dart' as http;
 import 'package:pokedex_app/models/pokemon.dart';
@@ -18,6 +19,9 @@ class PokemonService{
 
       //es la respuesta de tod el json
       final jsonResponse=json.decode(response.body);
+
+      //importar el developer, para ver que devuelve el servicio al ejecutar(solo para probar)
+      log(response.body);
 
       final List maps=jsonResponse["results"];
 

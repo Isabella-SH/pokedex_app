@@ -30,6 +30,18 @@ class PokemonRepository{
     return maps.isNotEmpty;  //devuelve todos los que se guardaron como favoritos
   }
 
+  Future<List<Pokemon>> getAll() async{
+
+    Database db= await PokemonDatabase().openDb();
+
+    //para un get solo llamar a la database y el nombre de que tabla necesito la informacion
+    final maps=await db.query(PokemonDatabase().tableName);
+
+    //convierto los maps, que se obtienen de la tabla, a objetos Pokemon
+    //retorno una lista de ello
+    return maps.map((map)=> Pokemon.fromMap(map)).toList();
+  }
+
 
 
 
